@@ -1,0 +1,29 @@
+eureka:
+  instance:
+    hostname: localhost
+    port: 9000
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${eureka.instance.port}/eureka/
+    server:
+      wait-time-in-ms-when-sync-empty: 3000
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: product-api-es
+          uri: lb://PRODUCT-API-ES
+          predicates:
+            - Path=/product/**
+        - id: shoppingcart
+          uri: lb://SHOPPINGCART
+          predicates:
+            - Path=/cart/**
+
